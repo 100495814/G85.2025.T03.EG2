@@ -3,6 +3,7 @@ import os
 import re
 import hashlib
 import json
+import time
 from datetime import datetime
 from pathlib import Path
 from uc3m_money.account_deposit import AccountDeposit
@@ -214,7 +215,7 @@ class AccountManager:
         iban_found = False
         balance_result = 0
         path_all_transactions = Path(
-            _file_).resolve().parent.parent.parent / "unittest" / "data" / "all_transactions.json"
+            __file__).resolve().parent.parent.parent / "unittest" / "data" / "all_transactions.json"
         if not self.validate_iban(iban):
             raise AccountManagementException("InvalidIBANCode")
         try:
@@ -238,3 +239,59 @@ class AccountManager:
             balance_data = {"iban": iban, "date": str(datetime.now()), "balance": balance_result}
             json.dump(balance_data, file, indent=4)
         return True
+
+    def deposit_into_account(self, input_file):
+        try:
+            # Cargar archivo JSON
+            with open(input_file, 'r') as file:
+                data = json.load(file)
+
+            # Validar estructura
+            if "IBAN" not in data or "AMOUNT" not in data:
+                raise AccountManagementException("Formato JSON incorrecto")
+
+            iban = data["IBAN"]
+            amount_str = data["AMOUNT"]
+
+            # Validar IBAN (simplificado aquí, usar validación real)
+            if not iban.startswith("ES") or len(iban) != 24:
+                raise AccountManagementException("IBAN inválido")
+
+            # Validar monto
+            if not amount_str.startswith("EUR "):
+                raise AccountManagementException("Moneda incorrecta")
+
+            try:
+                amount = float(amount_str.split(" ")[1])
+                if amount <= 0:
+                    raise AccountManagementException("Monto inválido")
+            except ValueError:
+                raise AccountManagementException("Monto no numérico")
+
+            # Crear datos del depósito
+            deposit_data = {
+                "alg": "SHA-256",
+                "typ": "DEPOSIT",
+                "to_iban": iban,
+                "deposit_amount": amount,
+                "deposit_date": int(time.time()),  # Timestamp
+            }
+
+            # Crear firma SHA-256
+            sign_str = f"{deposit_data}"
+            deposit_signature = hashlib.sha256(sign_str.encode()).hexdigest()
+            deposit_data["deposit_signature"] = deposit_signature
+
+            # Guardar en archivo JSON
+            with open("deposits.json", "a") as outfile:
+                json.dump(deposit_data, outfile)
+                outfile.write("\n")
+
+            return deposit_signature
+
+        except FileNotFoundError:
+            raise AccountManagementException("Archivo no encontrado")
+        except json.JSONDecodeError:
+            raise AccountManagementException("Archivo JSON inválido")
+        except Exception as e:
+            raise AccountManagementException(f"Error interno: {e}")
