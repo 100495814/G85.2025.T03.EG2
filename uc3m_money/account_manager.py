@@ -208,3 +208,33 @@ class AccountManager:
                 json.dump([transfer_data], file, indent=4)
 
         return transfer_code
+
+    def calculate_balance(self, iban):
+        """Funcion para calcular el balance"""
+        iban_found = False
+        balance_result = 0
+        path_all_transactions = Path(
+            _file_).resolve().parent.parent.parent / "unittest" / "data" / "all_transactions.json"
+        if not self.validate_iban(iban):
+            raise AccountManagementException("InvalidIBANCode")
+        try:
+            with open(path_all_transactions, encoding="utf-8", mode="r") as file:
+                all_transactions = json.load(file)
+        except FileNotFoundError:
+            path_all_transactions.parent.mkdir(parents=True, exist_ok=True)
+            all_transactions = []
+            with open(path_all_transactions, encoding="utf-8", mode="w") as file:
+                json.dump(all_transactions, file, indent=4)
+        except json.JSONDecodeError:
+            raise AccountManagementException("File all_transactions is not a valid JSON")
+        for transaction in all_transactions:
+            if transaction["IBAN"] == iban:
+                balance_result += float(transaction["amount"])
+                iban_found = True
+        if not iban_found:
+            raise AccountManagementException("InvalidIBANCode")
+        path_balance_file = Path(__file__).resolve().parent.parent.parent / "unittest" / "data" / f"{iban}.json"
+        with open(path_balance_file, encoding="utf-8", mode="w") as file:
+            balance_data = {"iban": iban, "date": str(datetime.now()), "balance": balance_result}
+            json.dump(balance_data, file, indent=4)
+        return True

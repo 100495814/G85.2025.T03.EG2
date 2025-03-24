@@ -1,0 +1,42 @@
+[
+    {
+        "from_iban": "ES6036390983922098113875",
+        "to_iban": "Nomina marzo",
+        "transfer_type": "ES9121000418450200051332",
+        "transfer_amount": 10.0,
+        "transfer_concept": "ORDINARY",
+        "transfer_date": "01/01/2025",
+        "time_stamp": 1711065600.0,
+        "transfer_code": "95ffa9fad91a0e658d761dad85323aae"
+    },
+    {
+        "from_iban": "ES6036390983922098113875",
+        "to_iban": "Pago factura",
+        "transfer_type": "ES9121000418450200051332",
+        "transfer_amount": 10.01,
+        "transfer_concept": "URGENT",
+        "transfer_date": "2/2/2026",
+        "time_stamp": 1711065600.0,
+        "transfer_code": "ba0a96663a0cacbe561efae348945e9f"
+    },
+    {
+        "from_iban": "ES6036390983922098113875",
+        "to_iban": "Envio Internacional",
+        "transfer_type": "ES9121000418450200051332",
+        "transfer_amount": 10000.0,
+        "transfer_concept": "IMMEDIATE",
+        "transfer_date": "31/12/2050",
+        "time_stamp": 1711065600.0,
+        "transfer_code": "65ff3ac6560bb40abc13606890d1b451"
+    },
+    {
+        "from_iban": "ES6036390983922098113875",
+        "to_iban": "Transferencia Pago Educacion",
+        "transfer_type": "ES9121000418450200051332",
+        "transfer_amount": 9999.99,
+        "transfer_concept": "ORDINARY",
+        "transfer_date": "30/11/2049",
+        "time_stamp": 1711065600.0,
+        "transfer_code": "3f1a02b45c1abbedf2763478687e2e43"
+    }
+]
