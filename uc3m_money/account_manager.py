@@ -4,6 +4,7 @@ import re
 import hashlib
 import json
 from datetime import datetime
+from json import JSONDecodeError
 from pathlib import Path
 from uc3m_money.account_deposit import AccountDeposit
 from uc3m_money.transfer_request import TransferRequest
@@ -67,7 +68,7 @@ class AccountManager:
         return (10.00 <= amount <= 10000.00
                 and round(amount, 2) == amount)
 
-    def validate_iban(iban: str):
+    def validate_iban(self, iban: str):
         """Devuelve True si el IBAN es un IBAN español válido, en otro caso devuelve False."""
         # Comprueba que IBAN es un string
         if not isinstance(iban, str):

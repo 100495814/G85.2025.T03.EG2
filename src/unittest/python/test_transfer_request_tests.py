@@ -1,10 +1,9 @@
-"""class for testing the regsiter_order method"""
 import unittest
 from freezegun import freeze_time
 from uc3m_money import AccountManager
 
 class MyTestCase(unittest.TestCase):
-    """class for testing the register_order method"""
+    """clase para probar el metodo"""
     def test_something( self ):
         """dummy test"""
         self.assertEqual(True, False)
