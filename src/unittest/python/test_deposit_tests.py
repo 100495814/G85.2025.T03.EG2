@@ -28,7 +28,7 @@ class TestDeposit(unittest.TestCase):
         if os.path.exists(self.file_name):
             os.remove(self.file_name)
 
-    def test_deposit_with_invalid_json(self):
+    def test_TCNV2(self):
         """
         Verifica que la función lance AccountManagementException
         cuando el JSON no tenga la estructura requerida.
@@ -39,7 +39,7 @@ class TestDeposit(unittest.TestCase):
 
         self.assertIn("Formato JSON incorrecto", str(context.exception))
 
-    def test_deposit_with_valid_json(self):
+    def test_TCV1(self):
         """
         Sobrescribe el archivo con datos válidos y verifica que la función
         no lance excepción y retorne una firma correcta.
@@ -47,7 +47,7 @@ class TestDeposit(unittest.TestCase):
         # 1) Sobrescribimos el archivo con datos válidos
         valid_data = {
             "IBAN": "ES9121000418450200051332",
-            "AMOUNT": "EUR 100.50"
+            "AMOUNT": "EUR 100.00"
         }
         with open(self.file_name, "w") as f:
             json.dump(valid_data, f)
@@ -63,6 +63,284 @@ class TestDeposit(unittest.TestCase):
         except AccountManagementException as e:
             self.fail(f"No debería lanzar excepción con datos válidos. Excepción: {e}")
 
+    def test_TCNV1(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "AMOUNT": "EUR 100.00"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        with self.assertRaises(AccountManagementException) as context:
+            manager.deposit_into_account(self.file_name)
+
+        self.assertIn("Formato JSON incorrecto", str(context.exception))
+
+    def test_TCNV3(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "GB29NWBK60161331926819",
+            "AMOUNT": "EUR 100.00"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        with self.assertRaises(AccountManagementException) as context:
+            manager.deposit_into_account(self.file_name)
+
+        self.assertIn("IBAN inválido", str(context.exception))
+
+    def test_TCNV4(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES912180841845020005133",
+            "AMOUNT": "EUR 100.00"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        with self.assertRaises(AccountManagementException) as context:
+            manager.deposit_into_account(self.file_name)
+
+        self.assertIn("IBAN inválido", str(context.exception))
+
+    def test_TCNV5(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES91218084184502000513344",
+            "AMOUNT": "EUR 100.00"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        with self.assertRaises(AccountManagementException) as context:
+            manager.deposit_into_account(self.file_name)
+
+        self.assertIn("IBAN inválido", str(context.exception))
+
+    def test_TCNV6(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES9121808418450200051332",
+            "AMOUNT": "USD 100.00"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        with self.assertRaises(AccountManagementException) as context:
+            manager.deposit_into_account(self.file_name)
+
+        self.assertIn("Moneda incorrecta", str(context.exception))
+
+    def test_TCNV7(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES9121808418450200051332",
+            "AMOUNT": "EUR one hundred"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        with self.assertRaises(AccountManagementException) as context:
+            manager.deposit_into_account(self.file_name)
+
+        self.assertIn("Monto no numérico", str(context.exception))
+
+    def test_TCNV8(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES9121808418450200051332",
+            "AMOUNT": "EUR 0.00"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        with self.assertRaises(AccountManagementException) as context:
+            manager.deposit_into_account(self.file_name)
+
+        self.assertIn("Monto inválido", str(context.exception))
+
+    def test_TCNV9(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES9121808418450200051332",
+            "AMOUNT": "EUR -1.00"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        with self.assertRaises(AccountManagementException) as context:
+            manager.deposit_into_account(self.file_name)
+
+        self.assertIn("Monto inválido", str(context.exception))
+
+    def test_TCV2(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES9121808418450200051332",
+            "AMOUNT": "EUR 0.01"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        try:
+            deposit_signature = manager.deposit_into_account(self.file_name)
+            # 3) Verificamos que el resultado sea un string (posible hash)
+            self.assertIsInstance(deposit_signature, str)
+            # Si esperamos un hash SHA-256 en hexadecimal, debería tener 64 caracteres
+            self.assertEqual(len(deposit_signature), 64)
+        except AccountManagementException as e:
+            self.fail(f"No debería lanzar excepción con datos válidos. Excepción: {e}")
+
+    def test_TCV3(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES9121808418450200051332",
+            "AMOUNT": "EUR 999999999.99"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        try:
+            deposit_signature = manager.deposit_into_account(self.file_name)
+            # 3) Verificamos que el resultado sea un string (posible hash)
+            self.assertIsInstance(deposit_signature, str)
+            # Si esperamos un hash SHA-256 en hexadecimal, debería tener 64 caracteres
+            self.assertEqual(len(deposit_signature), 64)
+        except AccountManagementException as e:
+            self.fail(f"No debería lanzar excepción con datos válidos. Excepción: {e}")
+
+    def test_TCV4(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES9121808418450200051332",
+            "AMOUNT": "EUR 123.45"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        try:
+            deposit_signature = manager.deposit_into_account(self.file_name)
+            # 3) Verificamos que el resultado sea un string (posible hash)
+            self.assertIsInstance(deposit_signature, str)
+            # Si esperamos un hash SHA-256 en hexadecimal, debería tener 64 caracteres
+            self.assertEqual(len(deposit_signature), 64)
+        except AccountManagementException as e:
+            self.fail(f"No debería lanzar excepción con datos válidos. Excepción: {e}")
+
+    def test_TCV5(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES9121808418450200051332",
+            "AMOUNT": "EUR 123.4"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        try:
+            deposit_signature = manager.deposit_into_account(self.file_name)
+            # 3) Verificamos que el resultado sea un string (posible hash)
+            self.assertIsInstance(deposit_signature, str)
+            # Si esperamos un hash SHA-256 en hexadecimal, debería tener 64 caracteres
+            self.assertEqual(len(deposit_signature), 64)
+        except AccountManagementException as e:
+            self.fail(f"No debería lanzar excepción con datos válidos. Excepción: {e}")
+
+    def test_TCV6(self):
+        """
+        Sobrescribe el archivo con datos válidos y verifica que la función
+        no lance excepción y retorne una firma correcta.
+        """
+        # 1) Sobrescribimos el archivo con datos válidos
+        valid_data = {
+            "IBAN": "ES9121808418450200051332",
+            "AMOUNT": "EUR 123.4"
+        }
+        with open(self.file_name, "w") as f:
+            json.dump(valid_data, f)
+
+        # 2) Llamamos a la función
+        manager = AccountManager()
+        try:
+            deposit_signature = manager.deposit_into_account(self.file_name)
+            # 3) Verificamos que el resultado sea un string (posible hash)
+            self.assertIsInstance(deposit_signature, str)
+            # Si esperamos un hash SHA-256 en hexadecimal, debería tener 64 caracteres
+            self.assertEqual(len(deposit_signature), 64)
+        except AccountManagementException as e:
+            self.fail(f"No debería lanzar excepción con datos válidos. Excepción: {e}")
 
 
 
