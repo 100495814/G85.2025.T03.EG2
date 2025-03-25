@@ -5,7 +5,6 @@ import hashlib
 import json
 import time
 from datetime import datetime
-from json import JSONDecodeError
 from pathlib import Path
 from uc3m_money.account_deposit import AccountDeposit
 from uc3m_money.transfer_request import TransferRequest
@@ -69,7 +68,7 @@ class AccountManager:
         return (10.00 <= amount <= 10000.00
                 and round(amount, 2) == amount)
 
-    def validate_iban(self, iban: str):
+    def validate_iban(iban: str):
         """Devuelve True si el IBAN es un IBAN español válido, en otro caso devuelve False."""
         # Comprueba que IBAN es un string
         if not isinstance(iban, str):
@@ -96,6 +95,57 @@ class AccountManager:
 
         # Devuelve True si es valido, en otro caso devuelve False
         if remainder == 1:
+            return True
+        return False
+
+
+    @staticmethod
+    def validate_concept(concept: str):
+        """Funcion validar concepto"""
+
+        # Comprueba que el concepto es un string
+        if not isinstance(concept, str):
+            return False
+
+        if len(concept) > 30 or (len(concept) < 10 and " " in concept):
+            return False
+
+        # Se asegura de que no haya caracteres especiales
+        if re.search(r'[^a-zA-Z0-9 ]', concept):
+            return False
+
+        # Se asegura de que haya al menos un espacio entre las letras/números del concepto
+        if " " not in concept:
+            return False
+
+        return True
+    @staticmethod
+    def validate_transfer_type(transfer_type: str):
+        """Función validar tipo de transferencia"""
+        if transfer_type not in {"ORDINARY", "URGENT", "IMMEDIATE"}:
+            return False
+        return True
+
+    @staticmethod
+    def validate_date(date):
+        """Funcion validar fecha"""
+        try:
+            dt = datetime.strptime(date, "%d/%m/%Y")
+            if not (2025 <= dt.year < 2051 and dt >= datetime.today()):
+                return False
+        except ValueError:
+            return False
+        return True
+
+
+    @staticmethod
+    def validate_amount(amount):
+        """Funcion validar cantidad"""
+        # Comprueba si el importe es un número entero o flotante
+        if not isinstance(amount, (int, float)):
+            return False
+        # Comprueba si la cantidad está en el rango correcto
+        if  (10.00 <= amount <= 10000.00 and round(amount, 2) == amount):
             return True
         return False
 
@@ -126,6 +176,8 @@ class AccountManager:
                                                 transfer_type, date, amount)
             else:
                 raise ValueError("to_iban not valid")
+
+
 
         transfer = TransferRequest(from_iban, to_iban, concept, transfer_type, date, amount)
         transfer_code = hashlib.md5(str(transfer).encode()).hexdigest()
