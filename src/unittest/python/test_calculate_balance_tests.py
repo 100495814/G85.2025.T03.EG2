@@ -41,7 +41,7 @@ class MyTestCase(unittest.TestCase):
         # Verificar el saldo calculado correctamente usando assertEqual (precisión de punto flotante)
         self.assertAlmostEqual(float(balance_data["balance"]), -1280.06)
 
-    def test_calculate_balance_ok_tc7(self):
+    def test_calculate_balance_ok_tc2(self):
         """
         1_2_3_5_6_7_8_9_10_11_12_13_10_11_10_14_16_17_18_19
         """
@@ -53,7 +53,8 @@ class MyTestCase(unittest.TestCase):
         self.assertTrue(am.calculate_balance(iban))  # valid
         os.rename(destination_path, source_path)  # restaurar el archivo json a su nombre original
 
-        path_balance_file = (str(Path.home()) + r"")
+        path_balance_file = (str(Path.home())
+                            + r"")
 
         try:
             with open(path_balance_file, encoding="UTF-8", mode="r") as file:
@@ -73,7 +74,7 @@ class MyTestCase(unittest.TestCase):
 
 
     @freeze_time("2025-03-19 12:00:00")
-    def test_calculate_balance_ko_tc2(self):
+    def test_calculate_balance_ko_tc3(self):
         """
         1_2_3_5_6_7_8_9_10_11_10_14_15
         """
