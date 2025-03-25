@@ -17,13 +17,13 @@ class MyTestCase(unittest.TestCase):
         """
         iban = "ES9121000418450200051332"
         am = AccountManager()
-        source_path = (str(Path.home()) + r"")
-        destination_path = (str(Path.home()) + r"")
+        source_path = (str(Path.home()) + r"\PyCharmProjects\G85.2025.T03.GE2\src\unittest\python\all_transactions1.json")
+        destination_path = (str(Path.home()) + r"\PyCharmProjects\G85.2025.T03.GE2\src\unittest\python\all_transactions.json")
         os.rename(source_path, destination_path)  # Toma el json con formato incorrecto como all_transactions
         self.assertTrue(am.calculate_balance(iban))  # valid
         os.rename(destination_path, source_path)  # restaurar el archivo json a su nombre original
 
-        path_balance_file = (str(Path.home()) + r"")
+        path_balance_file = (str(Path.home()) + r"\PyCharmProjects\G85.2025.T03.GE2\src\unittest\python\all_balances.json")
 
         try:
             with open(path_balance_file, encoding="UTF-8", mode="r") as file:
@@ -47,14 +47,13 @@ class MyTestCase(unittest.TestCase):
         """
         iban = "ES865834204541216877204"
         am = AccountManager()
-        source_path = (str(Path.home()) + r"")
-        destination_path = (str(Path.home()) + r"")
+        source_path = (str(Path.home()) + r"\PyCharmProjects\G85.2025.T03.GE2\src\unittest\python\all_transactions.json")
+        destination_path = (str(Path.home()) + r"\PyCharmProjects\G85.2025.T03.GE2\src\unittest\python\all_transactions.json")
         os.rename(source_path, destination_path)  # Toma el json con formato incorrecto como all_transactions
         self.assertTrue(am.calculate_balance(iban))  # valid
         os.rename(destination_path, source_path)  # restaurar el archivo json a su nombre original
 
-        path_balance_file = (str(Path.home())
-                            + r"")
+        path_balance_file = (str(Path.home()) + r"\PyCharmProjects\G85.2025.T03.GE2\src\unittest\python\all_balances.json")
 
         try:
             with open(path_balance_file, encoding="UTF-8", mode="r") as file:
