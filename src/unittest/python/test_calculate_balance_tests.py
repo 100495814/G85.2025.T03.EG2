@@ -17,7 +17,7 @@ class MyTestCase(unittest.TestCase):
         """
         iban = "ES9121000418450200051332"
         am = AccountManager()
-        source_path = (str(Path.home()) + r"\PyCharmProjects\G85.2025.T03.GE2\src\unittest\python\all_transactions1.json")
+        source_path = (str(Path.home()) + r"\PyCharmProjects\G85.2025.T03.GE2\src\unittest\python\all_transactions.json")
         destination_path = (str(Path.home()) + r"\PyCharmProjects\G85.2025.T03.GE2\src\unittest\python\all_transactions.json")
         os.rename(source_path, destination_path)  # Toma el json con formato incorrecto como all_transactions
         self.assertTrue(am.calculate_balance(iban))  # valid
